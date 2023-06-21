@@ -39,6 +39,7 @@ public class GameScennary : MonoBehaviour
         }
         if (ismenuOn == true)
         {
+            sanityBar.SetActive(false);
             menuObj.SetActive(true);
             Time.timeScale = 0;
         } else

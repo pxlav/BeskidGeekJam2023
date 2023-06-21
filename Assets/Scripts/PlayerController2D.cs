@@ -14,7 +14,6 @@ public class PlayerController2D : MonoBehaviour
     public GameObject frontPlayer;
     public bool isLeft;
     public int wichJump;
-    public bool isHiding;
     public float sanityValue;
     public GameScennary m_gameScennary;
     public Slider sanitySlider;
@@ -25,11 +24,13 @@ public class PlayerController2D : MonoBehaviour
     public GameObject sanityLow2;
     public GameObject sanityLow3;
     public GameObject sanityUp;
-
+    public RawImage sanityVignette;
+    public bool isPlayerHidden;
+    public bool hidden;
+    public GameObject hiddenObj;
     void Start()
     {
         rightPlayer.SetActive(false);
-        isHiding = false;
         sanityValue = 100;
         isMinussanity = true;
         canAddsanity = false;
@@ -37,10 +38,15 @@ public class PlayerController2D : MonoBehaviour
         sanityLow.SetActive(false);
         sanityLow2.SetActive(false);
         sanityLow3.SetActive(false);
+        sanityVignette.rectTransform.localScale = new Vector3(15, 15, 15);
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Application.LoadLevel(0);
+        }
         if (m_gameScennary.isgameStopped == true)
         {
             //sanity
@@ -77,25 +83,21 @@ public class PlayerController2D : MonoBehaviour
             {
                 speed = 2f;
             }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                isHiding = !isHiding;
-            }
-            if (isHiding == true)
-            {
-                PlayerHiding();
-            }
             if (sanityValue < 75)
             {
                 sanityLow.SetActive(true);
+                sanityVignette.rectTransform.localScale = new Vector3(13, 13, 13);
             }
             if (sanityValue < 50)
             {
                 sanityLow2.SetActive(true);
+                sanityVignette.rectTransform.localScale = new Vector3(9, 9, 9);
             }
             if (sanityValue < 30)
             {
                 sanityLow3.SetActive(true);
+                sanityVignette.rectTransform.localScale = new Vector3(7, 7, 7);
+
             }
             if (Input.GetKey(KeyCode.A) && !Input.GetMouseButton(0))
             {
@@ -120,6 +122,20 @@ public class PlayerController2D : MonoBehaviour
                 frontPlayer.SetActive(true);
                 walkingAudio.SetActive(false);
             }
+            if(hiddenObj != null)
+            {
+                if(Input.GetKeyDown(KeyCode.Space))
+                {
+                    hidden = !hidden;
+                }
+            }
+            if(hidden == true)
+            {
+                Debug.Log("skryty");
+            }else
+            {
+                Debug.Log("niekryty");
+            }
 
         }
     }
@@ -129,21 +145,23 @@ public class PlayerController2D : MonoBehaviour
 
         rb.velocity = new Vector2(speed * move, rb.velocity.y);
     }
-    public void PlayerHiding()
-    {
-        Debug.Log("Hideee");
-    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "MainEnemy")
         {
             m_gameScennary.YouDied();
+
         }
         if (collision.tag == "SanityFlies")
         {
             sanityUp.SetActive(true);
             canAddsanity = true;
             isMinussanity = false;
+        }
+        if(collision.tag == "HidingObject")
+        {
+            hiddenObj = collision.gameObject;
+            isPlayerHidden = true;
         }
     }
 
@@ -154,6 +172,11 @@ public class PlayerController2D : MonoBehaviour
             sanityUp.SetActive(false);
             canAddsanity = false;
             isMinussanity = true;
+        }
+        if (collision.tag == "HidingObject")
+        {
+            hiddenObj = null;
+            isPlayerHidden = false;
         }
     }
 }

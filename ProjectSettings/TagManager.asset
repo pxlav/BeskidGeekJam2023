@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainEnemy
   - SanityFlies
+  - HidingObject
   layers:
   - Default
   - TransparentFX
