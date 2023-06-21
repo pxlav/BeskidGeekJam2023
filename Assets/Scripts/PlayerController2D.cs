@@ -40,7 +40,7 @@ public class PlayerController2D : MonoBehaviour
         {
             speed = 3f;
         }
-        if (sanityValue > 10 && sanityValue == 30)
+        if (sanityValue > 10 && sanityValue == 30)  
         {
             speed = 2.5f;
         }
