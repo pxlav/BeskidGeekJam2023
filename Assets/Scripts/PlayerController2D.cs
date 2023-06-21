@@ -14,6 +14,7 @@ public class PlayerController2D : MonoBehaviour
     public int wichJump;
     public bool isHiding;
     public int sanityValue;
+    public GameScennary m_gameScennary;
 
     void Start()
     {
@@ -90,5 +91,12 @@ public class PlayerController2D : MonoBehaviour
     public void PlayerHiding()
     {
         Debug.Log("Hideee");
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "MainEnemy")
+        {
+            m_gameScennary.YouDied();
+        }
     }
 }
