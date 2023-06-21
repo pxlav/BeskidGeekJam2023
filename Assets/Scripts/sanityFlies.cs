@@ -11,7 +11,7 @@ public class sanityFlies : MonoBehaviour
     public float destroyTimer;
     private void Start()
     {
-        destroyTimer = 5.0f;
+        destroyTimer = 3.0f;
         lifeTime = 3.5f;
         particlessAnimator.Play("idle");
     }

@@ -12,20 +12,31 @@ public class GameScennary : MonoBehaviour
     public bool isDied;
     public float dieTimer;
     public GameObject dieScreen;
+    public GameObject sanityBar;
+    public bool isgameStopped;
 
     private void Start()
     {
         ismenuOn = true;
         cutScenesTimer = 0;
         firstCutScenesObj.SetActive(false);
-        canCutSceneShow = false;
+        canCutSceneShow = true;
         isDied = false;
         dieTimer = 0.0f;
         dieScreen.SetActive(false);
+        sanityBar.SetActive(false);
     }
 
     private void Update()
     {
+        if (ismenuOn == false && canCutSceneShow == false && isDied == false)
+        {
+            sanityBar.SetActive(true);
+            isgameStopped = true;
+        }else
+        {
+            isgameStopped = false;
+        }
         if (ismenuOn == true)
         {
             menuObj.SetActive(true);
@@ -36,10 +47,15 @@ public class GameScennary : MonoBehaviour
             Time.timeScale = 1;
             if (canCutSceneShow == true)
             {
+                if(Input.GetKeyDown(KeyCode.Space))
+                {
+                    cutScenesTimer = 32.9f;
+                }
                 firstCutScenesObj.SetActive(true);
                 canCutSceneShow = true;
                 cutScenesTimer += Time.deltaTime;
-                if (cutScenesTimer >= 9)
+
+                if (cutScenesTimer >= 33)
                 {
                     firstCutScenesObj.SetActive(false);
                     canCutSceneShow = false;

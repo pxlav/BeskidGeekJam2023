@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class PlayerController2D : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class PlayerController2D : MonoBehaviour
     public Slider sanitySlider;
     public bool isMinussanity;
     public bool canAddsanity;
+    public GameObject walkingAudio;
+    public GameObject sanityLow;
+    public GameObject sanityLow2;
+    public GameObject sanityLow3;
+    public GameObject sanityUp;
+
     void Start()
     {
         rightPlayer.SetActive(false);
@@ -26,76 +33,95 @@ public class PlayerController2D : MonoBehaviour
         sanityValue = 100;
         isMinussanity = true;
         canAddsanity = false;
+        walkingAudio.SetActive(false);
+        sanityLow.SetActive(false);
+        sanityLow2.SetActive(false);
+        sanityLow3.SetActive(false);
     }
 
     void Update()
     {
-        //sanity
-        sanitySlider.value = sanityValue / 100;
-        if (canAddsanity == true)
+        if (m_gameScennary.isgameStopped == true)
         {
-            sanityValue += 0.01f;
-        }
-        if (isMinussanity == true)
-        {
-            sanityValue -= 0.007f;
-        }
-        if (sanityValue > 90 && sanityValue == 100)
-        {
-            speed = 5.5f;
-        }
-        if (sanityValue > 70 && sanityValue == 80)
-        {
-            speed = 4f;
-        }
-        if (sanityValue > 50 && sanityValue == 70)
-        {
-            speed = 3.5f;
-        }
-        if (sanityValue > 30 && sanityValue == 50)
-        {
-            speed = 3f;
-        }
-        if (sanityValue > 10 && sanityValue == 30)
-        {
-            speed = 2.5f;
-        }
-        if (sanityValue < 10)
-        {
-            speed = 2f;
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isHiding = !isHiding;
-        }
-        if (isHiding == true)
-        {
-            PlayerHiding();
-        }
-        //if (m_menu.isOn == false)
-        //{
-        if (Input.GetKey(KeyCode.A) && !Input.GetMouseButton(0))
-        {
-            leftPlayer.SetActive(true);
-            rightPlayer.SetActive(false);
-            frontPlayer.SetActive(false);
-            isLeft = true;
-        }
-        if (Input.GetKey(KeyCode.D) && !Input.GetMouseButton(0))
-        {
-            leftPlayer.SetActive(false);
-            rightPlayer.SetActive(true);
-            frontPlayer.SetActive(false);
-            isLeft = false;
-        }
-        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-        {
-            leftPlayer.SetActive(false);
-            rightPlayer.SetActive(false);
-            frontPlayer.SetActive(true);
-        }
+            //sanity
+            sanitySlider.value = sanityValue / 100;
+            if (canAddsanity == true)
+            {
+                sanityValue += 0.01f;
+            }
+            if (isMinussanity == true)
+            {
+                sanityValue -= 0.007f;
+            }
+            if (sanityValue > 90 && sanityValue == 100)
+            {
+                speed = 5.5f;
+            }
+            if (sanityValue > 70 && sanityValue == 80)
+            {
+                speed = 4f;
+            }
+            if (sanityValue > 50 && sanityValue == 70)
+            {
+                speed = 3.5f;
+            }
+            if (sanityValue > 30 && sanityValue == 50)
+            {
+                speed = 3f;
+            }
+            if (sanityValue > 10 && sanityValue == 30)
+            {
+                speed = 2.5f;
+            }
+            if (sanityValue < 10)
+            {
+                speed = 2f;
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                isHiding = !isHiding;
+            }
+            if (isHiding == true)
+            {
+                PlayerHiding();
+            }
+            if (sanityValue < 75)
+            {
+                sanityLow.SetActive(true);
+            }
+            if (sanityValue < 50)
+            {
+                sanityLow2.SetActive(true);
+            }
+            if (sanityValue < 30)
+            {
+                sanityLow3.SetActive(true);
+            }
+            if (Input.GetKey(KeyCode.A) && !Input.GetMouseButton(0))
+            {
+                leftPlayer.SetActive(true);
+                rightPlayer.SetActive(false);
+                walkingAudio.SetActive(true);
+                frontPlayer.SetActive(false);
+                isLeft = true;
+            }
+            if (Input.GetKey(KeyCode.D) && !Input.GetMouseButton(0))
+            {
+                leftPlayer.SetActive(false);
+                rightPlayer.SetActive(true);
+                walkingAudio.SetActive(true);
+                frontPlayer.SetActive(false);
+                isLeft = false;
+            }
+            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            {
+                leftPlayer.SetActive(false);
+                rightPlayer.SetActive(false);
+                frontPlayer.SetActive(true);
+                walkingAudio.SetActive(false);
+            }
 
-        //}
+        }
     }
     void FixedUpdate()
     {
@@ -115,6 +141,7 @@ public class PlayerController2D : MonoBehaviour
         }
         if (collision.tag == "SanityFlies")
         {
+            sanityUp.SetActive(true);
             canAddsanity = true;
             isMinussanity = false;
         }
@@ -124,6 +151,7 @@ public class PlayerController2D : MonoBehaviour
     {
         if (collision.tag == "SanityFlies")
         {
+            sanityUp.SetActive(false);
             canAddsanity = false;
             isMinussanity = true;
         }
