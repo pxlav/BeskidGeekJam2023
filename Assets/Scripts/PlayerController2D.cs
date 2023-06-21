@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController2D : MonoBehaviour
 {
@@ -13,18 +14,32 @@ public class PlayerController2D : MonoBehaviour
     public bool isLeft;
     public int wichJump;
     public bool isHiding;
-    public int sanityValue;
+    public float sanityValue;
     public GameScennary m_gameScennary;
-
+    public Slider sanitySlider;
+    public bool isMinussanity;
+    public bool canAddsanity;
     void Start()
     {
         rightPlayer.SetActive(false);
         isHiding = false;
         sanityValue = 100;
+        isMinussanity = true;
+        canAddsanity = false;
     }
 
     void Update()
     {
+        //sanity
+        sanitySlider.value = sanityValue / 100;
+        if (canAddsanity == true)
+        {
+            sanityValue += 0.01f;
+        }
+        if (isMinussanity == true)
+        {
+            sanityValue -= 0.007f;
+        }
         if (sanityValue > 90 && sanityValue == 100)
         {
             speed = 5.5f;
@@ -41,7 +56,7 @@ public class PlayerController2D : MonoBehaviour
         {
             speed = 3f;
         }
-        if (sanityValue > 10 && sanityValue == 30)  
+        if (sanityValue > 10 && sanityValue == 30)
         {
             speed = 2.5f;
         }
@@ -94,9 +109,23 @@ public class PlayerController2D : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "MainEnemy")
+        if (collision.tag == "MainEnemy")
         {
             m_gameScennary.YouDied();
+        }
+        if (collision.tag == "SanityFlies")
+        {
+            canAddsanity = true;
+            isMinussanity = false;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "SanityFlies")
+        {
+            canAddsanity = false;
+            isMinussanity = true;
         }
     }
 }
