@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class MainEnemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameScennary m_gameScenarry;
+    public float speed;
+    private void Update()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (m_gameScenarry.isgameStopped == true)
+        {
+            this.transform.Translate(speed, 0, 0);
+        }
     }
 }

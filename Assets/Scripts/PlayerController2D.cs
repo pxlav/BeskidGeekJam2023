@@ -28,6 +28,7 @@ public class PlayerController2D : MonoBehaviour
     public bool isPlayerHidden;
     public bool hidden;
     public GameObject hiddenObj;
+    public GameObject playerSpritesobj;
     void Start()
     {
         rightPlayer.SetActive(false);
@@ -43,6 +44,10 @@ public class PlayerController2D : MonoBehaviour
 
     void Update()
     {
+        if(sanityValue <= 0)
+        {
+            m_gameScennary.YouDied();
+        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             Application.LoadLevel(0);
@@ -131,10 +136,11 @@ public class PlayerController2D : MonoBehaviour
             }
             if(hidden == true)
             {
-                Debug.Log("skryty");
-            }else
+                playerSpritesobj.SetActive(false);
+            }
+            else
             {
-                Debug.Log("niekryty");
+                playerSpritesobj.SetActive(true);
             }
 
         }
@@ -163,6 +169,10 @@ public class PlayerController2D : MonoBehaviour
             hiddenObj = collision.gameObject;
             isPlayerHidden = true;
         }
+        if(collision.tag == "przeciwnik" && isPlayerHidden == false)
+        {
+            sanityValue -= 30;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -175,8 +185,10 @@ public class PlayerController2D : MonoBehaviour
         }
         if (collision.tag == "HidingObject")
         {
+            playerSpritesobj.SetActive(true);
             hiddenObj = null;
             isPlayerHidden = false;
+            hidden = false;
         }
     }
 }

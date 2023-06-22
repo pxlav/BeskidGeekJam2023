@@ -14,6 +14,8 @@ public class GameScennary : MonoBehaviour
     public GameObject dieScreen;
     public GameObject sanityBar;
     public bool isgameStopped;
+    public GameObject firstHouse;
+    public EndOfTheGame endOfTheGame;
 
     private void Start()
     {
@@ -25,12 +27,14 @@ public class GameScennary : MonoBehaviour
         dieTimer = 0.0f;
         dieScreen.SetActive(false);
         sanityBar.SetActive(false);
+        firstHouse.SetActive(false);
     }
 
     private void Update()
     {
-        if (ismenuOn == false && canCutSceneShow == false && isDied == false)
+        if (ismenuOn == false && canCutSceneShow == false && isDied == false && endOfTheGame.canEndTheGame == false)
         {
+            firstHouse.SetActive(true);
             sanityBar.SetActive(true);
             isgameStopped = true;
         }else
@@ -56,7 +60,7 @@ public class GameScennary : MonoBehaviour
                 canCutSceneShow = true;
                 cutScenesTimer += Time.deltaTime;
 
-                if (cutScenesTimer >= 33)
+                if (cutScenesTimer >= 22)
                 {
                     firstCutScenesObj.SetActive(false);
                     canCutSceneShow = false;

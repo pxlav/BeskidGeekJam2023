@@ -9,12 +9,13 @@ public class EndOfTheGame : MonoBehaviour
     public bool canEndTheGame;
     public float endTimer;
     public GameObject endSceneObj;
+    public GameObject playerObj;
 
     private void Start()
     {
         endSceneObj.SetActive(false);
         canEndTheGame = false;
-        endTimer = 5.0f;
+        endTimer = 7.0f;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -27,6 +28,7 @@ public class EndOfTheGame : MonoBehaviour
     {
         if (canEndTheGame == true)
         {
+            Destroy(playerObj);
             endSceneObj.SetActive(true);
             endTimer -= Time.deltaTime;
             if (endTimer <= 0)

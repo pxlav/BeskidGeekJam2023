@@ -7,6 +7,7 @@ TagManager:
   - MainEnemy
   - SanityFlies
   - HidingObject
+  - przeciwnik
   layers:
   - Default
   - TransparentFX
