@@ -15,7 +15,7 @@ public class EndOfTheGame : MonoBehaviour
     {
         endSceneObj.SetActive(false);
         canEndTheGame = false;
-        endTimer = 7.0f;
+        endTimer = 12.0f;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -29,6 +29,14 @@ public class PlayerController2D : MonoBehaviour
     public bool hidden;
     public GameObject hiddenObj;
     public GameObject playerSpritesobj;
+    public GameObject tutorialObj;
+    public bool canShowTutorial;
+    public int[] tutorialConditions;
+    public AudioSource hidingSound;
+    public GameObject sliderGameObject;
+    public GameObject lapkiObj;
+    public EndOfTheGame endofthegame;
+    public GameObject spaceObj;
     void Start()
     {
         rightPlayer.SetActive(false);
@@ -40,11 +48,26 @@ public class PlayerController2D : MonoBehaviour
         sanityLow2.SetActive(false);
         sanityLow3.SetActive(false);
         sanityVignette.rectTransform.localScale = new Vector3(15, 15, 15);
+        canShowTutorial = true;
+        sliderGameObject.transform.localScale = new Vector3(1.893226f, 1.893226f, 1.893226f);
+        lapkiObj.SetActive(false);
+        spaceObj.SetActive(false);
     }
 
     void Update()
     {
-        if(sanityValue <= 0)
+        if(canShowTutorial == true)
+        {
+            tutorialObj.SetActive(true);
+        }else
+        {
+            tutorialObj.SetActive(false);
+        }
+        if (tutorialConditions[0] == 1 && tutorialConditions[1] == 1 && tutorialConditions[2] == 1)
+        {
+            canShowTutorial = false;
+        }
+        if (sanityValue <= 0)
         {
             m_gameScennary.YouDied();
         }
@@ -56,12 +79,14 @@ public class PlayerController2D : MonoBehaviour
         {
             //sanity
             sanitySlider.value = sanityValue / 100;
-            if (canAddsanity == true)
+            if (canAddsanity == true && sanityValue <= 100)
             {
-                sanityValue += 0.01f;
+                sliderGameObject.transform.localScale = new Vector3(2, 2, 2);
+                sanityValue += 0.021f;
             }
             if (isMinussanity == true)
             {
+                sliderGameObject.transform.localScale = new Vector3(1.893226f, 1.893226f, 1.893226f);
                 sanityValue -= 0.007f;
             }
             if (sanityValue > 90 && sanityValue == 100)
@@ -97,6 +122,11 @@ public class PlayerController2D : MonoBehaviour
             {
                 sanityLow2.SetActive(true);
                 sanityVignette.rectTransform.localScale = new Vector3(9, 9, 9);
+                lapkiObj.SetActive(true);
+            }
+            if(sanityValue > 50 || endofthegame.canEndTheGame == true)
+            {
+                lapkiObj.SetActive(false);
             }
             if (sanityValue < 30)
             {
@@ -104,15 +134,19 @@ public class PlayerController2D : MonoBehaviour
                 sanityVignette.rectTransform.localScale = new Vector3(7, 7, 7);
 
             }
-            if (Input.GetKey(KeyCode.A) && !Input.GetMouseButton(0))
+            if (Input.GetKey(KeyCode.A))
             {
                 leftPlayer.SetActive(true);
                 rightPlayer.SetActive(false);
                 walkingAudio.SetActive(true);
                 frontPlayer.SetActive(false);
                 isLeft = true;
+                if(canShowTutorial == true)
+                {
+                    tutorialConditions[0] = 1;
+                }
             }
-            if (Input.GetKey(KeyCode.D) && !Input.GetMouseButton(0))
+            if (Input.GetKey(KeyCode.D))
             {
                 leftPlayer.SetActive(false);
                 rightPlayer.SetActive(true);
@@ -129,17 +163,25 @@ public class PlayerController2D : MonoBehaviour
             }
             if(hiddenObj != null)
             {
-                if(Input.GetKeyDown(KeyCode.Space))
+                spaceObj.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
                     hidden = !hidden;
+                    hidingSound.Play();
+                    if (canShowTutorial == true)
+                    {
+                        tutorialConditions[2] = 1;
+                    }
                 }
             }
             if(hidden == true)
             {
                 playerSpritesobj.SetActive(false);
+                spaceObj.SetActive(false);
             }
             else
             {
+
                 playerSpritesobj.SetActive(true);
             }
 
@@ -163,9 +205,14 @@ public class PlayerController2D : MonoBehaviour
             sanityUp.SetActive(true);
             canAddsanity = true;
             isMinussanity = false;
+            if (canShowTutorial == true)
+            {
+                tutorialConditions[1] = 1;
+            }
         }
         if(collision.tag == "HidingObject")
         {
+            spaceObj.SetActive(true);
             hiddenObj = collision.gameObject;
             isPlayerHidden = true;
         }
@@ -186,6 +233,7 @@ public class PlayerController2D : MonoBehaviour
         if (collision.tag == "HidingObject")
         {
             playerSpritesobj.SetActive(true);
+            spaceObj.SetActive(false);
             hiddenObj = null;
             isPlayerHidden = false;
             hidden = false;

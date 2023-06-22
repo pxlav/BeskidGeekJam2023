@@ -16,6 +16,7 @@ public class GameScennary : MonoBehaviour
     public bool isgameStopped;
     public GameObject firstHouse;
     public EndOfTheGame endOfTheGame;
+    public AudioSource clickSound;
 
     private void Start()
     {
@@ -37,22 +38,28 @@ public class GameScennary : MonoBehaviour
             firstHouse.SetActive(true);
             sanityBar.SetActive(true);
             isgameStopped = true;
-        }else
+        }
+        else
         {
             isgameStopped = false;
         }
         if (ismenuOn == true)
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                clickSound.Play();
+            }
             sanityBar.SetActive(false);
             menuObj.SetActive(true);
             Time.timeScale = 0;
-        } else
+        }
+        else
         {
             menuObj.SetActive(false);
             Time.timeScale = 1;
             if (canCutSceneShow == true)
             {
-                if(Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
                     cutScenesTimer = 32.9f;
                 }
@@ -68,15 +75,15 @@ public class GameScennary : MonoBehaviour
                 }
             }
         }
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             ismenuOn = !ismenuOn;
         }
-        if(isDied == true)
+        if (isDied == true)
         {
             dieScreen.SetActive(true);
             dieTimer += Time.deltaTime;
-            if(dieTimer > 3.0f)
+            if (dieTimer > 3.0f)
             {
                 SceneManager.LoadScene(0);
             }
